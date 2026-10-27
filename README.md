@@ -7,7 +7,7 @@ https://learn.microsoft.com/en-us/cpp/windows/redist-version-auditing?view=msvc-
 
 Before using this, you will need to configure an Advanced Audit Policy setting, either via GPO or via Local Policy. Those specific settings can be found in the above article.
 
-Currently, the list of EoL or dependencies that this tracks can be found in the CSV's. This can be edited for additional dependencies, but you will need to have an idea of their exact paths, so you don't inadvertently adjust the auditing ACL on a ton of unnecessary items.
+Currently, the list of EoL or dependencies that this tracks can be found in the CSV. This can be edited for additional dependencies, but you will need to have an idea of their exact paths, so you don't inadvertently adjust the auditing ACL on a ton of unnecessary items.
 
 Additionally, prior to rolling this out to an entire environment, it is worth gauging the size increase of the security event log. Some files may already have the file level side of the auditing set, and enabling the GPO/Local policy setting may inadvertently blow up the security event logs.
 
