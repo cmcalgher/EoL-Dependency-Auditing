@@ -11,7 +11,7 @@ Currently, the list of EoL or dependencies that this tracks can be found in the 
 
 Additionally, prior to rolling this out to an entire environment, it is worth gauging the size increase of the security event log. Some files may already have the file level side of the auditing set, and enabling the GPO/Local policy setting may inadvertently blow up the security event logs.
 
-The main script is used to either set the auditing ACL's on the file-level side, or collect relevant events pertaining to the items specified in the CSV's. If collecting events, it will collect events from the past 24 hours, and export them to a CSV, neatly formatted, and able to be merged with other of the same files found across whatever environment you end up using this on.
+The main script is used to either set the auditing ACL's on the file-level side, or collect relevant events pertaining to the items specified in the CSV. If collecting events, it will collect events from the past 24 hours, and export them to a CSV, neatly formatted, and able to be merged with other of the same files found across whatever environment you end up using this on.
 
 So if you are not wanting to do 'scream tests' during vulnerability remediation, and have no idea if removing VC++ 2012 or that random .NET 5 installation will cause a critical business application to come crashing down, you can let this run for a while to get an idea if it is actually 'safe' to rip that EoL software out.
 
