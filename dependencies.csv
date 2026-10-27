@@ -1,18 +1,18 @@
-﻿name,string,AddRemoveString
-VC2005,(WinSxS\\Fusion\\.*microsoft\.vc80|msdia80),c\+\+ 2005
-VC2008,(WinSxS\\Fusion\\.*microsoft\.vc90|msdia90),c\+\+ 2008
-VC2010,((atl|msvc[pr]|vcamp|vccorlib|vcomp|msdia)100|mfc100(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm100(u)?)\.dll$,c\+\+ 2010
-VC2012,((atl|msvc[pr]|vcamp|vccorlib|vcomp|msdia)110|mfc110(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm110(u)?)\.dll$,c\+\+ 2012
-VC2013,((atl|msvc[pr]|vcamp|vccorlib|vcomp|msdia)120|mfc120(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm120(u)?)\.dll$,c\+\+ 2013
-DotNet3,c:\\program files( \(x86\))?\\dotnet\\.*\\3.*\.dll$,\.NET*3\.1
-DotNet5,c:\\program files( \(x86\))?\\dotnet\\.*\\5.*\.dll$,\.NET*5\.0
-DotNet6,c:\\program files( \(x86\))?\\dotnet\\.*\\6.*\.dll$,\.NET*6\.0
-DotNet7,c:\\program files( \(x86\))?\\dotnet\\.*\\7.*\.dll$,\.NET*7\.0
-Silverlight,c:\\program files\\Microsoft Silverlight\\.*\.dll$,silverlight
-SQL2012,c:\\program files( \(x86\))?\\Microsoft SQL Server\\110\\.*\.dll$,SQL Server 2012
-SQL2008,c:\\program files( \(x86\))?\\Microsoft SQL Server\\100\\.*\.dll$,SQL Server 2008
-SQLCompact,C:\\Program Files( \(x86\))?\\Microsoft SQL Server Compact Edition\\.*\.dll$,SQL Server Compact
-SQL2014,c:\\program files( \(x86\))?\\Microsoft SQL Server\\120\\.*\.dll$,SQL Server 2014
-DotNet8,c:\\program files( \(x86\))?\\dotnet\\.*\\8.*\.dll$,\.NET*8\.0
-DotNet9,c:\\program files( \(x86\))?\\dotnet\\.*\\9.*\.dll$,\.NET*9\.0
-DotNet10,c:\\program files( \(x86\))?\\dotnet\\.*\\10.*\.dll$,\.NET*10\.0
+﻿name,string,basepaths,filterstring
+VC2005,(WinSxS\\Fusion\\.*microsoft\.vc80|msdia80),"c:\windows\winsxs\fusion, c:\program files\common files\microsoft shared\VC, c:\program files (x86)\common files\microsoft shared\VC",microsoft\.vc[89]0.*\.dll$
+VC2008,(WinSxS\\Fusion\\.*microsoft\.vc90|msdia90),"c:\windows\winsxs\fusion, c:\program files\common files\microsoft shared\VC, c:\program files (x86)\common files\microsoft shared\VC",microsoft\.vc[89]0.*\.dll$
+VC2010,((atl|msvc[pr]|vcamp|vccorlib|vcomp|msdia)100|mfc100(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm100(u)?)\.dll$,"c:\windows\system32, c:\windows\SysWOW64",((atl|msvc[pr]|vcamp|vccorlib|vcomp)100|mfc100(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm100(u)?)\.dll$
+VC2012,((atl|msvc[pr]|vcamp|vccorlib|vcomp|msdia)110|mfc110(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm110(u)?)\.dll$,"c:\windows\system32, c:\windows\SysWOW64",((atl|msvc[pr]|vcamp|vccorlib|vcomp)110|mfc110(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm110(u)?)\.dll$
+VC2013,((atl|msvc[pr]|vcamp|vccorlib|vcomp|msdia)120|mfc120(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm120(u)?)\.dll$,"c:\windows\system32, c:\windows\SysWOW64",((atl|msvc[pr]|vcamp|vccorlib|vcomp)120|mfc120(u|(chs|cht|deu|enu|esn|fra|ita|jpn|kor|rus))?|mfcm120(u)?)\.dll$
+DotNet3,c:\\program files( \(x86\))?\\dotnet\\.*\\3.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
+DotNet5,c:\\program files( \(x86\))?\\dotnet\\.*\\5.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
+DotNet6,c:\\program files( \(x86\))?\\dotnet\\.*\\6.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
+DotNet7,c:\\program files( \(x86\))?\\dotnet\\.*\\7.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
+Silverlight,c:\\program files\\Microsoft Silverlight\\.*\.dll$,c:\program files\Microsoft Silverlight,\.dll$
+SQL2012,c:\\program files( \(x86\))?\\Microsoft SQL Server\\110\\.*\.dll$,"C:\Program Files\Microsoft SQL Server\110, C:\Program Files (x86)\Microsoft SQL Server\110",^(?!.*[/\\]Setup Bootstrap[/\\]).*?\.dll$
+SQL2008,c:\\program files( \(x86\))?\\Microsoft SQL Server\\100\\.*\.dll$,"C:\Program Files (x86)\Microsoft SQL Server\100, C:\Program Files\Microsoft SQL Server\100",^(?!.*[/\\]Setup Bootstrap[/\\]).*?\.dll$
+SQLCompact,C:\\Program Files( \(x86\))?\\Microsoft SQL Server Compact Edition\\.*\.dll$,"C:\Program Files (x86)\Microsoft SQL Server Compact Edition, C:\Program Files\Microsoft SQL Server Compact Edition",\.dll$
+SQL2014,c:\\program files( \(x86\))?\\Microsoft SQL Server\\120\\.*\.dll$,"C:\Program Files\Microsoft SQL Server\120, C:\Program Files (x86)\Microsoft SQL Server\120",^(?!.*[/\\]Setup Bootstrap[/\\]).*?\.dll$
+DotNet8,c:\\program files( \(x86\))?\\dotnet\\.*\\8.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
+DotNet9,c:\\program files( \(x86\))?\\dotnet\\.*\\9.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
+DotNet10,c:\\program files( \(x86\))?\\dotnet\\.*\\10.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
