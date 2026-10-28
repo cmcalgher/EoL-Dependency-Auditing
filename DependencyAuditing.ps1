@@ -4,6 +4,10 @@
 #
 # .\DependencyAuditing.ps1 -Action GetAuditing
 #
+# To search further back (or less far back) than the default 24 hours, add -Hours, e.g. the last 3 days:
+#
+# .\DependencyAuditing.ps1 -Action GetAuditing -Hours 72
+#
 # To set auditing on the files found under each row's 'basepaths' that match its 'filterstring':
 #
 # .\DependencyAuditing.ps1 -Action SetAuditing
@@ -33,7 +37,11 @@ param (
     [string]$Action,
 
     # Defaults to Dependencies.csv in the same folder as this script.
-    [string]$CsvPath
+    [string]$CsvPath,
+
+    # GetAuditing only: how many hours back to search the Security event log for matching events. Defaults to 24.
+    [ValidateRange(1, [int]::MaxValue)]
+    [int]$Hours = 24
 )
 
 # The folder this script is saved in. Both the input CSV and the exported event CSV live here.
@@ -53,7 +61,8 @@ $ExportPath = Join-Path $ScriptDir "$($env:COMPUTERNAME)_AuditEventData.csv"
 
 $DependencyData = Import-Csv $CsvPath
 
-# The below function is what collects the events, specifically event ID 4663 events, from the last 24 hours.
+# The below function is what collects the events, specifically event ID 4663 events, from the last -Hours hours (default 24).
+# Larger -Hours values pull in more events and take longer.
 # Depending on the volume of 4663 events, this part MAY time-out. This can happen for things like web page files that are touched by web app
 # exe's, which depending on how many use it, may need to have the auditing side of the ACL's disabled.
 function Get-DependencyEvents {
@@ -61,9 +70,10 @@ function Get-DependencyEvents {
     # Only rows that have a search string are used for event matching.
     $dependencyInfo = $DependencyData | Where-Object { -not [string]::IsNullOrWhiteSpace($_.string) }
 
-    # This next line sets the 'in the last x number of hours' limit for event collection.
+    # This next line sets the 'in the last x number of hours' limit for event collection, from the -Hours parameter.
 
-    $StartTime = (Get-Date).AddHours(-24)
+    $StartTime = (Get-Date).AddHours(-$Hours)
+    Write-Host "Searching the Security event log for 4663 events from the last $($Hours) hour(s)..."
     $events = Get-WinEvent -FilterHashtable @{LogName='Security'; StartTime=$StartTime; Id='4663'}
 
     # Parse every event's XML once, up front, rather than once per dependency.
@@ -77,23 +87,76 @@ function Get-DependencyEvents {
         }
     }
 
-    # The below loops through each dependency row, collecting matching events,
-    # and appends them to a CSV. That CSV is named based on the host name the script is ran on, as well.
+    # STEP 1: The below loops through each dependency row, collecting matching events,
+    # and APPENDS them to the export CSV. That CSV is named based on the host name the script is ran on, as well.
 
+    $appendedCount = 0
     foreach ($dependency in $dependencyInfo){
-        $parsedEvents | Where-Object {$_.ObjectName -imatch $dependency.string} |
+        $matched = @($parsedEvents | Where-Object {$_.ObjectName -imatch $dependency.string} |
             ForEach-Object {
                 [PSCustomObject]@{
                     HostName    = $env:COMPUTERNAME
                     Dependency  = $dependency.name
                     ProcessName = $_.ProcessName
                     ObjectName  = $_.ObjectName
-                    EventTime   = $_.EventTime
+                    EventTime   = $_.EventTime.ToString('yyyy-MM-dd HH:mm:ss')
                 }
-            } |
-            Export-Csv -NoTypeInformation -Path $ExportPath -Append -WhatIf:$false
+            })
+
+        if ($matched.Count -gt 0) {
+            $matched | Export-Csv -NoTypeInformation -Path $ExportPath -Append -WhatIf:$false
+            $appendedCount += $matched.Count
+        }
+    }
+    Write-Host "Appended $($appendedCount) matching events to $($ExportPath)"
+
+    # STEP 2: De-duplicate the whole export file (rows from this run AND all previous runs).
+
+    Remove-DuplicateDependencyEvents
+}
+
+# Reads the full export file back in, keeps only the most recent entry for each unique
+# Dependency + ProcessName + ObjectName combination, and rewrites the file with just those rows.
+function Remove-DuplicateDependencyEvents {
+
+    if (-not (Test-Path -Path $ExportPath)) {
+        Write-Host "No export file found at $($ExportPath), nothing to de-duplicate."
+        return
     }
 
+    $allRows = @(Import-Csv -Path $ExportPath)
+
+    $latestRows = @($allRows |
+        Group-Object -Property Dependency, ProcessName, ObjectName |
+        ForEach-Object {
+            $_.Group |
+                Sort-Object -Property @{ Expression = { ConvertTo-EventDateTime $_.EventTime } } -Descending |
+                Select-Object -First 1
+        } |
+        Sort-Object -Property Dependency, ProcessName, ObjectName |
+        Select-Object HostName, Dependency, ProcessName, ObjectName,
+            @{Name = 'EventTime'; Expression = { (ConvertTo-EventDateTime $_.EventTime).ToString('yyyy-MM-dd HH:mm:ss') }})
+
+    if ($latestRows.Count -gt 0) {
+        $latestRows | Export-Csv -NoTypeInformation -Path $ExportPath -WhatIf:$false
+    }
+    Write-Host "De-duplicated $($ExportPath): $($allRows.Count) rows reduced to $($latestRows.Count) unique entries."
+}
+
+# Converts an EventTime value read back from the export CSV into a real date, so events can be compared by time.
+# Handles both the format this script now writes (yyyy-MM-dd HH:mm:ss) and the local date format older runs wrote.
+function ConvertTo-EventDateTime {
+    param ([string]$value)
+
+    $parsed = [datetime]::MinValue
+    if ([datetime]::TryParseExact($value, 'yyyy-MM-dd HH:mm:ss', [System.Globalization.CultureInfo]::InvariantCulture,
+            [System.Globalization.DateTimeStyles]::None, [ref]$parsed)) {
+        return $parsed
+    }
+    if ([datetime]::TryParse($value, [ref]$parsed)) {
+        return $parsed
+    }
+    return [datetime]::MinValue
 }
 
 # the below function is used to store the needed auditing-side of the ACL settings that are set to enable the 4663 events on individual files.
