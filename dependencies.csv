@@ -16,3 +16,5 @@ SQL2014,c:\\program files( \(x86\))?\\Microsoft SQL Server\\120\\.*\.dll$,"C:\Pr
 DotNet8,c:\\program files( \(x86\))?\\dotnet\\.*\\8.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
 DotNet9,c:\\program files( \(x86\))?\\dotnet\\.*\\9.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
 DotNet10,c:\\program files( \(x86\))?\\dotnet\\.*\\10.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
+Java,c:\\program files( \(x86\))?\\.*\\Java\\.*\.(exe|dll)$,"c:\program files, c:\program files (x86)",\.(dll|exe)$
+PHP,php.*\.dll$,"c:\PHP, c:\program files, c:\program files (x86)",\.dll$
