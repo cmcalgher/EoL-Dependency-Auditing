@@ -15,5 +15,5 @@ The main script is used to either set the auditing ACL's on the file-level side,
 
 So if you are not wanting to do 'scream tests' during vulnerability remediation, and have no idea if removing VC++ 2012 or that random .NET 5 installation will cause a critical business application to come crashing down, you can let this run for a while to get an idea if it is actually 'safe' to rip that EoL software out.
 
-this powershell 'code' could probably be cleaned up a ton and/or optimized, but I am a humble IT professional who does vulnerability remediation, and wear what I call an 'aluminum crown' when approaching EoL software remediation.
+This script is a work in progress, and could probably be cleaned up a bit and/or optimized. I plan on continually adding to it as time permits, and vulnerabilities in software are discovered, or as things move into end of life status.
 
