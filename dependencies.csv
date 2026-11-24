@@ -18,3 +18,4 @@ DotNet9,c:\\program files( \(x86\))?\\dotnet\\.*\\9.*\.dll$,"c:\program files\do
 DotNet10,c:\\program files( \(x86\))?\\dotnet\\.*\\10.*\.dll$,"c:\program files\dotnet, c:\program files (x86)\dotnet",\.dll$
 Java,c:\\program files( \(x86\))?\\.*\\Java\\.*\.(exe|dll)$,"c:\program files, c:\program files (x86)",Java.*\.(dll|exe)$
 PHP,php.*\.dll$,"c:\PHP, c:\program files, c:\program files (x86)",php.*\.dll$
+Ghostscript,c:\\program files\\gs\\.*gs.*\.(dll|exe)$,c:\program files\gs,gs.*\.(dll|exe)$
